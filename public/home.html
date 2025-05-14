@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Heroes Arena</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Main Menu -->
+    <div class="menu-container" id="menuScreen">
+        <div class="menu-buttons">
+            <button class="menu-button" onclick="startGame()">Start</button>
+            <button class="menu-button" onclick="showHighscore()">Highscore</button>
+            <button class="menu-button" onclick="openOptions()">Options</button>
+            <button class="menu-button" onclick="exitGame()">Exit</button>
+        </div>
+    </div>
+    
+    <!-- Audio -->
+    <audio id="bgMusic" loop autoplay>
+        <source src="assets/sounds/music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Highscore Screen (Hidden Default) -->
+    <div id="highscoreScreen" style="display: none; text-align: center;">
+        <h2>Highscore</h2>
+        <p>Top Player: 1000 points</p>
+        <p>Your Score: <span id="yourScore">0</span> points</p>
+        <button onclick="backToMenu()">Back</button>
+    </div>
+
+    <!-- Options Screen (Hidden Default) -->
+    <div id="optionsScreen" style="display: none; text-align: center;">
+        <h2>Options</h2>
+        <div class="option-item">
+            <img src="assets/images/music-icon.png" alt="Music Icon" class="option-image">
+            <label for="musicToggle">Music</label>
+            <input type="checkbox" id="musicToggle" checked onchange="toggleMusic()">
+            <label for="animToggle">Animations</label>
+        <input type="checkbox" id="animToggle" checked onchange="toggleAnimations()">
+        </div>
+        <button onclick="backToMenu()">Back</button>
+    </div>
+
+    <!-- Character Selection (Visible from Start, Positioned on Right) -->
+    <div id="characterSelection" class="character-selection" style="display: block;">
+        <h2>Select Your Hero</h2>
+        <div class="character-carousel">
+            <button class="carousel-btn prev" onclick="prevHero()"><</button>
+            <div class="character-display">
+                <img id="characterImage" src="assets/images/grok.png" alt="Character" class="hero-image" onclick="jumpAnimation()">
+                <span id="heroName">Grok</span>
+            </div>
+            <button class="carousel-btn next" onclick="nextHero()">></button>
+        </div>
+        <button class="select-btn" onclick="selectHero()">Select</button>
+    </div>
+
+    <!-- Rock Paper Scissors Display (Visible from Start, Positioned on Left) -->
+    <div id="rpsDisplay" class="rps-display" style="display: block;">
+        <div class="rps-options">
+            <img src="assets/images/rock.png" alt="Rock" class="rps-image" onclick="selectChoice('rock'); shakeAnimation(this)">
+            <img src="assets/images/paper.png" alt="Paper" class="rps-image" onclick="selectChoice('paper'); shakeAnimation(this)">
+            <img src="assets/images/scissors.png" alt="Scissors" class="rps-image" onclick="selectChoice('scissors'); shakeAnimation(this)">
+        </div>
+        <div class="rps-description">
+            <p id="rpsDescription">Click a choice to see its function!</p>
+        </div>
+    </div>
+
+    <!-- Decoration for Bottom -->
+    <div id="decoration" class="decoration"></div>
+
+    <!-- Interactive Panel at Bottom Right -->
+    <div id="infoPanel" class="info-panel">
+        <a href="https://twitter.com/handheroesarena" target="_blank">
+            <img src="assets/images/twitter-icon.png" alt="Twitter" class="panel-icon" title="Follow us on Twitter">
+        </a>
+        <a href="https://facebook.com/handheroesarena" target="_blank">
+            <img src="assets/images/facebook-icon.png" alt="Facebook" class="panel-icon" title="Like us on Facebook">
+        </a>
+        <img src="assets/images/info-icon.png" alt="Info" class="panel-icon" id="infoIcon" title="Total Wins: 5" onclick="showInfo()">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

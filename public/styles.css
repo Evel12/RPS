@@ -1,0 +1,653 @@
+@import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap');
+
+
+/* --- Background & Body Styling --- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: url('assets/images/Background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Background khusus untuk in-game */
+body.in-game {
+    background: url('assets/images/battle-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* --- Loading Screen Animation --- */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    transition: opacity 0.5s;
+}
+
+#loading-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Loader Animation with Better Compatibility */
+.loader {
+    width: 50px;
+    aspect-ratio: 1;
+    display: grid;
+    background: #f03355;
+    mask: conic-gradient(from 15deg, #0000, #000);
+    -webkit-mask: conic-gradient(from 15deg, #0000, #000);
+    animation: l26 1s infinite steps(12);
+}
+
+.loader,
+.loader:before,
+.loader:after {
+    background:
+        radial-gradient(closest-side at 50% 12.5%, #f03355 96%, #0000) 50% 0/20% 80% repeat-y,
+        radial-gradient(closest-side at 12.5% 50%, #f03355 96%, #0000) 0 50%/80% 20% repeat-x;
+}
+
+.loader:before,
+.loader:after {
+    content: "";
+    grid-area: 1/1;
+    transform: rotate(30deg);
+}
+
+.loader:after {
+    transform: rotate(60deg);
+}
+
+@keyframes l26 {
+    100% { transform: rotate(1turn); }
+}
+
+/* --- Menu Container Styling --- */
+.menu-container {
+    background: rgba(50, 50, 50, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    width: 350px;
+    height: 400px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    position: relative;
+    z-index: 3;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    margin-top: 150px;
+}
+.menu-container.visible {
+    opacity: 1;
+}
+
+.menu-buttons {
+    margin-top: 5px;
+}
+
+/* --- Tombol Menu --- */
+.menu-button {
+    width: 308px;
+    height: 85px;
+    padding-left: 11.96px;
+    padding-right: 11.96px;
+    padding-top: 5.98px;
+    padding-bottom: 5.98px;
+    margin: 20px auto; 
+    font-size: 36px;
+    background: linear-gradient(179deg, #B7562D 10%, #512614 85%);
+    color: #FFE500;
+    font-family: Inknut Antiqua;
+    font-weight: 700;
+    border: 1px #D48943 solid;
+    border-radius: 23.92px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(9.97px);
+    text-align: center; 
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    margin-top: 5px;
+}
+
+.menu-button:hover {
+    background: linear-gradient(90deg, #ff6666, #ff8888);
+    transform: scale(1.05);
+}
+
+/* --- Highscore Screen Styling --- */
+#highscoreScreen {
+    background: rgba(50, 50, 50, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    width: 250px;
+    margin: 0 auto;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    position: relative;
+    top: 100px;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 3;
+}
+
+#highscoreScreen[style*="display: none"] {
+    opacity: 0;
+}
+
+#highscoreScreen h2 {
+    margin: 0 0 15px;
+    font-size: 24px;
+    color: #ff4444;
+}
+
+#highscoreScreen p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+#highscoreScreen button {
+    padding: 10px 20px;
+    margin: 5px;
+    background: linear-gradient(179deg, #B7562D 10%, #512614 85%);
+    color: #FFE500;
+    font-family: Inknut Antiqua;
+    font-weight: 700;
+    border: 1px #D48943 solid;
+    border-radius: 23.92px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#highscoreScreen button:hover {
+    background: linear-gradient(90deg, #ff6666, #ff8888);
+}
+
+/* --- Options Screen Styling --- */
+#optionsScreen {
+    background: rgba(50, 50, 50, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    width: 250px;
+    margin: 0 auto;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    position: relative;
+    top: 100px;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 3;
+}
+
+#optionsScreen[style*="display: none"] {
+    opacity: 0;
+}
+
+#optionsScreen h2 {
+    margin: 0 0 15px;
+    font-size: 24px;
+    color: #ff4444;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.option-image {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+#optionsScreen label {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+#musicToggle {
+    width: 20px;
+    height: 20px;
+}
+
+#optionsScreen button {
+    padding: 10px 20px;
+    margin: 5px;
+    background: linear-gradient(179deg, #B7562D 10%, #512614 85%);
+    color: #FFE500;
+    font-family: Inknut Antiqua;
+    font-weight: 700;
+    border: 1px #D48943 solid;
+    border-radius: 23.92px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#optionsScreen button:hover {
+    background: linear-gradient(90deg, #ff6666, #ff8888);
+}
+
+/* --- Character Selection Styling (Positioned on Right) --- */
+.character-selection {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(50, 50, 50, 0.8);
+    padding: 15px;
+    border-radius: 15px;
+    color: #FFDF0C;
+    width: 220px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    z-index: 3;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.character-selection.visible {
+    opacity: 1;
+}
+
+.character-selection h2 {
+    margin: 0 0 15px;
+    text-align: center;
+    color: #F36528;
+    font-size: 25px;
+    font-family: Archivo Black;
+    font-weight: 400;
+}
+
+.character-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.character-display {
+    margin: 0 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.hero-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    transition: transform 0.3s ease;
+    border: 2px solid #ff4444;
+}
+
+.hero-image:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 15px #ff6666;
+}
+
+#heroName {
+    display: block;
+    font-size: 16px;
+    text-align: center;
+    color: #F36528;
+    font-size: 25px;
+    font-family: Archivo Black;
+    font-weight: 400;
+}
+
+.carousel-btn {
+    background: linear-gradient(4deg, #B7562D 10%, #512614 85%);
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #FFDF0C;
+    transition: background 0.3s;
+}
+
+.carousel-btn:hover {
+    background: linear-gradient(90deg, #ff6666, #ff8888);
+}
+
+.select-btn, .back-btn {
+    padding: 3px 20px;
+    margin: 5px;
+    background: linear-gradient(4deg, #B7562D 10%, #512614 85%);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #FFDF0C;
+    font-family: Inknut Antiqua;
+    font-weight: 700;
+    border: 1px #D48943 solid;
+    border-radius: 23.92px;
+    transition: background 0.3s;
+}
+
+.select-btn:hover, .back-btn:hover {
+    background: linear-gradient(90deg, #ff6666, #ff8888);
+}
+
+/* --- Rock Paper Scissors Display (Positioned on Left) --- */
+.rps-display {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(50, 50, 50, 0.8);
+    padding: 15px;
+    border-radius: 15px;
+    color: white;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    z-index: 4;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.rps-display.visible {
+    opacity: 1;
+}
+
+.rps-options {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+
+.rps-image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: 2px solid #ff4444;
+}
+
+.rps-image:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px #ff6666;
+}
+
+.rps-description {
+    background: rgba(30, 30, 30, 0.9);
+    padding: 10px;
+    border-radius: 10px;
+    min-height: 80px;
+    border: 2px solid #ff4444;
+}
+
+#rpsDescription {
+    margin: 0;
+    font-size: 14px;
+    color: #ff4444;
+}
+
+/* --- Decoration Styling --- */
+.decoration {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: url('particle.png') repeat-x;
+    animation: moveParticles 10s linear infinite;
+    z-index: 1;
+}
+
+.decoration:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes moveParticles {
+    0% { background-position: 0 0; }
+    100% { background-position: -200px 0; }
+}
+
+/* --- Animation for Jump on Click (Hero) --- */
+@keyframes jump {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-30px); }
+    100% { transform: translateY(0); }
+}
+
+.jump-animation {
+    animation: jump 0.5s ease-in-out;
+}
+
+/* --- Animation for Shake on Click (RPS) --- */
+@keyframes shake {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(5px, -5px) rotate(5deg); }
+    50% { transform: translate(-5px, 5px) rotate(-5deg); }
+    75% { transform: translate(5px, -5px) rotate(5deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.shake-animation {
+    animation: shake 0.3s ease-in-out;
+}
+
+/* --- Info Panel Styling (Bottom Right) --- */
+.info-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px;
+    border-radius: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    z-index: 5;
+}
+
+.panel-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+    
+}
+
+.panel-icon[src*="facebook-icon"] {
+    object-fit: cover;
+    width: 40px;
+    height: 40px;
+}
+
+.panel-icon[src*="twitter-icon"] {
+    object-fit: cover;
+    width: 50px;
+    height: 50px;
+}
+
+.panel-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #ff6666;
+}
+
+#infoIcon {
+    width: 45px;
+    height: 45px;
+}
+
+#infoPanel label {
+    font-size: 14px;
+    color: #ff4444;
+    margin-right: 5px;
+}
+
+#animToggle {
+    width: 20px;
+    height: 20px;
+}
+
+/* --- Game Screen Styling --- */
+.game-screen {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(50, 50, 50, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    width: 1200px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    border: 3px solid #ff4444;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.battle-arena {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.character-side {
+    text-align: left;
+    width: 45%;
+}
+
+.opponent-side {
+    text-align: right;
+    width: 45%;
+}
+
+.battle-character {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+    border: 2px solid #ff4444;
+    border-radius: 10px;
+}
+
+.battle-character.attack {
+    animation: attackAnimation 0.5s ease-in-out;
+}
+
+.battle-character.defend {
+    animation: defendAnimation 0.5s ease-in-out;
+}
+
+.battle-character.fall {
+    animation: fallAnimation 0.5s ease-in-out forwards;
+}
+
+@keyframes attackAnimation {
+    0% { transform: translateX(0) scale(1); }
+    50% { transform: translateX(40px) scale(1.2); }
+    100% { transform: translateX(0) scale(1); }
+}
+
+@keyframes defendAnimation {
+    0% { transform: translateX(0) scale(1); }
+    50% { transform: translateX(-20px) scale(0.9); }
+    100% { transform: translateX(0) scale(1); }
+}
+
+@keyframes fallAnimation {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(50px) rotate(90deg); opacity: 0; }
+}
+
+.health-bar {
+    width: 100%;
+    background: #333;
+    border-radius: 5px;
+    margin: 5px 0;
+    overflow: hidden;
+}
+
+.health-bar-fill {
+    height: 20px;
+    background: linear-gradient(90deg, #EF1313 0%, #EFE70F 56%, #15EA20 100%);
+    transition: width 0.5s;
+}
+
+.game-options {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px 0;
+}
+
+.game-image {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: 2px solid #ff4444;
+}
+
+.game-image:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px #ff6666;
+}
+
+#gameResult, #score {
+    margin: 10px 0;
+    font-size: 18px;
+    color: #FFDF0C;
+}
+
+.game-screen button {
+    padding: 12px 25px;
+    background: linear-gradient(4deg, #B7562D 10%, #512614 85%);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #FFDF0C;
+    font-family: Inknut Antiqua;
+    font-weight: 700;
+    border: 1px #D48943 solid;
+    border-radius: 23.92px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.game-screen button:hover {
+    background: linear-gradient(90deg, #ff6666, #ff8888);
+    transform: scale(1.05);
+}
+
+/* --- Particles Container --- */
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}

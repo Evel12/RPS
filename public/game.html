@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Heroes Arena - Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="in-game">
+    <!-- Container untuk efek partikel -->
+    <div id="particles-js" style="position: absolute; width: 100%; height: 100%; z-index: 1;"></div>
+
+    <!-- Area Permainan (In-Game) -->
+    <div id="gameScreen" class="game-screen">
+        <h2>Battle Arena</h2>
+        <div class="battle-arena">
+            <div class="character-side">
+                <p id="heroName">Selected Hero: [Hero Name]</p>
+                <img id="heroImage" src="assets/images/grok.png" alt="Hero" class="battle-character">
+                <div class="health-bar">
+                    <div id="heroHP" class="health-bar-fill" style="width: 100%;"></div>
+                </div>
+                <p>HP: <span id="heroHPValue">100</span></p>
+            </div>
+            <div class="opponent-side">
+                <p id="opponent">Opponent: AI</p>
+                <img id="opponentImage" src="assets/images/enemy.png" alt="Enemy" class="battle-character">
+                <div class="health-bar">
+                    <div id="opponentHP" class="health-bar-fill" style="width: 100%;"></div>
+                </div>
+                <p>HP: <span id="opponentHPValue">100</span></p>
+            </div>
+        </div>
+        <div class="game-options">
+            <img src="assets/images/rock.png" alt="Rock" class="game-image" onclick="selectGameChoice('rock')">
+            <img src="assets/images/paper.png" alt="Paper" class="game-image" onclick="selectGameChoice('paper')">
+            <img src="assets/images/scissors.png" alt="Scissors" class="game-image" onclick="selectGameChoice('scissors')">
+        </div>
+        <p id="gameResult">Click to start the battle!</p>
+        <p id="score">Score: 0</p>
+        <button onclick="endGame()">End Game</button>
+    </div>
+
+    <!-- Audio -->
+    <audio id="bgMusic" loop>
+        <source src="assets/sounds/music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="battleMusic" loop>
+        <source src="assets/sounds/battle-music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="attackSound">
+        <source src="assets/sounds/attack-sound.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="winSound">
+        <source src="assets/sounds/win-sound.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <audio id="loseSound">
+        <source src="assets/sounds/lose-sound.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Tambahkan particles.js dengan debug -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        console.log('Loading particles.js...');
+        particlesJS.load('particles-js', 'particles.json', function() {
+            console.log('particles.js loaded successfully');
+        }, function(error) {
+            console.error('Error loading particles.js:', error);
+        });
+    </script>
+
+    <script src="game.js"></script>
+</body>
+</html>

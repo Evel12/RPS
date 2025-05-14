@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Hand Heroes Arena</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .auth-container {
+            text-align: center;
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Register</h2>
+        <form id="registerForm" method="POST" action="/register">
+            <input type="text" name="username" placeholder="Username" required class="menu-button"><br><br>
+            <input type="password" name="password" placeholder="Password" required class="menu-button"><br><br>
+            <button type="submit" class="menu-button">Register</button><br><br>
+            <a href="login.html" class="menu-button">Already have an account? Login</a>
+        </form>
+    </div>
+</body>
+</html>
