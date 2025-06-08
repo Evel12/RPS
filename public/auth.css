@@ -1,0 +1,76 @@
+.custom-alert {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    width: auto;
+    min-width: 250px;
+    max-width: 90%;
+    padding: 10px 40px 10px 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in forwards;
+    font-size: 16px;
+    line-height: 1.5;
+}
+.alert.alert-success.custom-alert {
+    margin: 0;
+    text-align: center;
+    background-color: #d4edda !important;
+    color: #155724 !important;
+    border-color: #c3e6cb !important;
+}
+.alert.alert-danger.custom-alert {
+    margin: 0;
+    text-align: center;
+    background-color: #f8d7da !important;
+    color: #72161c !important;
+    border-color: #f5c6cb !important;
+}
+.alert.alert-success.custom-alert .btn-close {
+    position: absolute !important;
+    top: 0 !important;
+    right: 5px !important;
+    transform: none !important;
+    background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23155724'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707A1 1 0 01.293.293z'/%3e%3c/svg%3e") center/1em auto no-repeat !important;
+    width: 1.2em !important;
+    height: 1.2em !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    opacity: 0.7 !important;
+    line-height: 1 !important;
+}
+.alert.alert-danger.custom-alert .btn-close {
+    position: absolute !important;
+    top: 0 !important;
+    right: 5px !important;
+    transform: none !important;
+    background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2372161c'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707A1 1 0 01.293.293z'/%3e%3c/svg%3e") center/1em auto no-repeat !important;
+    width: 1.2em !important;
+    height: 1.2em !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    opacity: 0.7 !important;
+    line-height: 1 !important;
+}
+.alert.alert-success.custom-alert .btn-close:hover,
+.alert.alert-danger.custom-alert .btn-close:hover {
+    opacity: 1 !important;
+}
+.custom-alert strong {
+    font-size: 1.1em;
+}
+.custom-alert.fade-out {
+    animation: fadeOut 0.3s ease-out forwards;
+}
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}

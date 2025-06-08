@@ -1,3 +1,4 @@
+
 // Ambil elemen audio
 const bgMusic = document.getElementById("bgMusic");
 const battleMusic = document.getElementById("battleMusic");
@@ -50,7 +51,6 @@ function submitScore(username, score) {
       .then(res => res.json())
       .then(data => {
         console.log('Skor dikirim:', data);
-        alert('Skor kamu berhasil disimpan!');
       })
       .catch(err => console.error('Gagal kirim skor:', err));
   }
@@ -73,7 +73,7 @@ const heroes = [
 ];
 
 // Tampilkan hero yang dipilih
-document.getElementById("heroName").textContent = `Selected Hero: ${selectedHero}`;
+document.getElementById("heroName").textContent = `${selectedHero}`;
 const heroImage = document.getElementById("heroImage");
 const selectedHeroData = heroes.find(hero => hero.name === selectedHero);
 if (selectedHeroData) {
@@ -83,8 +83,10 @@ document.getElementById("heroHPValue").textContent = heroHP;
 document.getElementById("opponentHPValue").textContent = opponentHP;
 
 // Fungsi untuk memilih pilihan dalam permainan
+let canPlay = true;
 function selectGameChoice(choice) {
-    if (isGameOver) return;
+    if (!canPlay || isGameOver) return;
+    canPlay = false;
 
     console.log("Pilihan dipilih:", choice);
     const choices = ['rock', 'paper', 'scissors'];
@@ -102,60 +104,136 @@ function selectGameChoice(choice) {
         heroImage.classList.remove("attack");
         opponentImage.classList.remove("defend");
 
-        if (choice === aiChoice) {
-            result = "Seri!";
-        } else if (
-            (choice === 'rock' && aiChoice === 'scissors') ||
-            (choice === 'paper' && aiChoice === 'rock') ||
-            (choice === 'scissors' && aiChoice === 'paper')
-        ) {
-            result = "Kamu menang!";
-            playSound(winSound);
-            const damage = 10 + (level * 2);
-            opponentHP -= damage;
-            if (opponentHP < 0) opponentHP = 0;
-            score += damage;
-            opponentImage.classList.add("fall");
-            setTimeout(() => opponentImage.classList.remove("fall"), 500);
-        } else {
-            result = "Kamu kalah!";
-            playSound(loseSound);
-            const damage = 10 + (level * 2);
-            heroHP -= damage;
-            if (heroHP < 0) heroHP = 0;
-        }
+        // Tampilkan pilihan gambar
+        const playerChoiceImage = document.getElementById("playerChoiceImage");
+        const aiChoiceImage = document.getElementById("aiChoiceImage");
 
-        // Update health bar
-        document.getElementById("heroHP").style.width = `${(heroHP / 100) * 100}%`;
-        document.getElementById("opponentHP").style.width = `${(opponentHP / 100) * 100}%`;
+        playerChoiceImage.src = `assets/images/${choice}.png`;
+        aiChoiceImage.src = `assets/images/${aiChoice}2.png`;
+        playerChoiceImage.style.display = 'block';
+        aiChoiceImage.style.display = 'block';
+
+        // Reset animation before applying new one
+resetAnimation(playerChoiceImage);
+resetAnimation(aiChoiceImage);
+
+if (choice === aiChoice) {
+    result = "Seri!";
+    playerChoiceImage.classList.add('draw');
+    aiChoiceImage.classList.add('draw');
+} else if (
+    (choice === 'rock' && aiChoice === 'scissors') ||
+    (choice === 'paper' && aiChoice === 'rock') ||
+    (choice === 'scissors' && aiChoice === 'paper')
+) {
+    result = "Kamu menang!";
+    playSound(winSound);
+    const damage = 10 + (level * 2);
+    opponentHP -= damage;
+    if (opponentHP < 0) opponentHP = 0;
+    score += damage;
+    opponentImage.classList.add("fall");
+    setTimeout(() => opponentImage.classList.remove("fall"), 500);
+    playerChoiceImage.classList.add('win');
+    aiChoiceImage.classList.add('lose');
+
+} else {
+    result = "Kamu kalah!";
+    playSound(loseSound);
+    const damage = 10 + (level * 2);
+    heroHP -= damage;
+    if (heroHP < 0) heroHP = 0;
+    playerChoiceImage.classList.add('lose');
+    aiChoiceImage.classList.add('win');
+}
+
+
+const heroMaxHP = 100;
+const opponentMaxHP = 100 + (level * 10);
+
+if (result === "Kamu menang!") {
+    updateHPBar("opponentHP", opponentHP, opponentMaxHP);
+} else if (result === "Kamu kalah!") {
+    updateHPBar("heroHP", heroHP, heroMaxHP);
+}
+
+
+
+
         document.getElementById("heroHPValue").textContent = heroHP;
         document.getElementById("opponentHPValue").textContent = opponentHP;
 
-        document.getElementById("gameResult").textContent = `Kamu memilih ${choice}, AI memilih ${aiChoice}. ${result}`;
         document.getElementById("score").textContent = `Score: ${score}`;
-
+        document.getElementById("gameResult").textContent = `Kamu memilih ${choice}, AI memilih ${aiChoice}. ${result}`;
+        
         // Simpan skor ke localStorage
         localStorage.setItem("gameScore", score);
 
+function showNotification(message) {
+    // Remove any existing alerts to avoid stacking
+    const existingAlerts = document.querySelectorAll('.custom-alert');
+    existingAlerts.forEach(alert => alert.remove());
+
+    // Create a Bootstrap success alert
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert-success alert-dismissible fade show custom-alert';
+    alertDiv.setAttribute('role', 'alert');
+    alertDiv.innerHTML = `
+        <strong>Next Enemy!</strong> ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+
+    // Append to body
+    document.body.appendChild(alertDiv);
+
+    // Auto-dismiss after 3 seconds with fade-out animation
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.classList.remove('show');
+            alertDiv.classList.add('fade-out'); // Add fade-out animation
+            setTimeout(() => alertDiv.remove(), 300); // Match animation duration
+        }
+    }, 3000);
+
+    // Ensure manual close also triggers fade-out
+    alertDiv.querySelector('.btn-close').addEventListener('click', () => {
+        alertDiv.classList.remove('show');
+        alertDiv.classList.add('fade-out');
+        setTimeout(() => alertDiv.remove(), 300);
+    });
+}
         // Cek kondisi permainan
         if (heroHP <= 0) {
-            alert("Game Over! Kamu kalah!");
-            endGame();
+            defeated();
         } else if (opponentHP <= 0) {
-            alert("Selamat! Kamu menang ronde ini!");
-            score += 50; // Bonus poin untuk kemenangan
+            showNotification("");
+            score += 50;
             level += 1;
             opponentHP = 100 + (level * 10);
-            document.getElementById("opponentHP").style.width = "100%";
+            updateHPBar("opponentHP", opponentHP, opponentHP);
             document.getElementById("opponentHPValue").textContent = opponentHP;
             document.getElementById("score").textContent = `Score: ${score}`;
             localStorage.setItem("gameScore", score);
         }
-    }, 500);
+
+        // Sembunyikan gambar pilihan setelah animasi selesai (opsional, sesuaikan durasi)
+        setTimeout(() => {
+        playerChoiceImage.style.animation = "none";
+        aiChoiceImage.style.animation = "none";
+        playerChoiceImage.classList.remove('win', 'lose', 'draw');
+        aiChoiceImage.classList.remove('win', 'lose', 'draw');
+
+        playerChoiceImage.style.display = 'none';
+        aiChoiceImage.style.display = 'none';
+
+            canPlay = true;
+        }, 500);
+        
+    }, 300);
 }
 
-function endGame() {
-    if (isGameOver) return; // Prevent multiple calls
+function defeated() {
+    if (isGameOver) return;
     isGameOver = true;
 
     stopMusic();
@@ -166,19 +244,74 @@ function endGame() {
     if (username) {
         submitScore(username, score);
     }
+    document.getElementById("finalScore").textContent = `Your Score: ${score} points`;
+    document.getElementById("defeatModal").style.display = "flex";
+}
 
-    window.location.href = "home.html";
+function endGame() {
+    window.location.href = "home.html";    
 }
 
 
 
 // Mulai musik battle saat halaman dimuat
-window.onload = function() {
-    stopMusic();
-    playBattleMusic();
+window.onload = function () {
+    stopMusic(); // Always stop music first
+
+    // Read settings
+    const musicEnabled = localStorage.getItem("musicEnabled") === "true";
+    const animationsEnabled = localStorage.getItem("animationsEnabled") !== "false";
+
+    // 🔁 Correctly apply sound/music settings
+    if (musicEnabled) {
+        playBattleMusic();
+    }
+
+    if (!animationsEnabled) {
+        document.body.classList.add("no-animations");
+    } else {
+        document.body.classList.remove("no-animations");
+    }
+
+    // Initialize game state
     score = 0;
     isGameOver = false;
     localStorage.setItem("gameScore", score);
     document.getElementById("score").textContent = `Score: ${score}`;
-    console.log("Game loaded, score reset, battle music playing");
 };
+
+
+// Fungsi untuk memperbarui HP bar dan warnanya
+function updateHPBar(hpElementId, currentHP, maxHP) {
+    let normalizedMaxHP = 100; // Force normalization
+    const hpPercentage = (currentHP / normalizedMaxHP) * 100;
+    const healthBar = document.getElementById(hpElementId);
+    const hpValueElement = document.getElementById(hpElementId.replace('HP', 'HPValue')); 
+    healthBar.style.width = hpPercentage + '%';
+
+    let color;
+    if (hpPercentage >= 75) {
+        color = '#15EA20'; 
+    } else if (hpPercentage >= 50) {
+        color = '#EFE70F'; 
+    } else if (hpPercentage >= 25) {
+        color = '#EF7F1A'; 
+    } else {
+        color = '#EF1313'; 
+    }
+
+    healthBar.style.background = color;
+    hpValueElement.style.color = color;
+}
+
+
+function resetAnimation(el) {
+    el.style.animation = 'none';
+    el.offsetHeight; // Force reflow
+    el.style.animation = '';
+}
+
+function retryGame() {
+  window.location.reload();
+}
+

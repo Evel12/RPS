@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Defeat Popup Test</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Aoboshi+One&family=Lemon&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inknut+Antiqua:wght@300;400;500;600;700;800;900&display=swap');
+
+    .modal {
+      display: flex;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.75);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #1f1f1f;
+      border-radius: 12px;
+      padding: 30px 20px 60px 20px;
+      text-align: center;
+      color: white;
+      width: 320px;
+      position: relative;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    }
+
+    .defeat-text {
+  color: #FF3E3E;
+  font-size: 45px;
+  font-family: Lemon;
+  font-weight: bold;
+  margin-top: -10px;
+  margin-bottom: 15px;
+}
+
+
+    .heart-icon {
+      width: 80px;
+      margin-bottom: 15px;
+    }
+
+    .score-text {
+      font-size: 18px;
+      font-family: Aoboshi One;
+      margin-top: 10px;
+      margin-bottom: 30px;
+      color: #ffffff;
+    }
+
+    .modal-buttons {
+      position: absolute;
+      bottom: 15px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .modal-buttons button {
+      background: linear-gradient(179deg, #B7562D 10%, #512614 85%);
+      color: #FFE500;
+      font-family: 'Inknut Antiqua', serif;
+      font-weight: 700;
+      border: 1px #D48943 solid;
+      border-radius: 23.92px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(9.97px);
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 12px;
+    }
+
+    .modal-buttons button:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Defeat Popup Modal -->
+<div id="defeatModal" class="modal">
+  <div class="modal-content">
+    <h2 class="defeat-text">Defeat</h2>
+    <img src="public/assets/images/lose.png" alt="Broken Heart" class="heart-icon">
+    <p id="finalScore" class="score-text">Your Score: 0 points</p>
+    <div class="modal-buttons">
+      <button onclick="retryGame()">Retry</button>
+      <button onclick="endGame()">End Game</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function retryGame() {
+    alert("Retry clicked (reload game)");
+    // window.location.reload(); // Uncomment in real usage
+  }
+
+  function endGame() {
+    alert("End Game clicked (go to home)");
+    // window.location.href = "home.html"; // Uncomment in real usage
+  }
+</script>
+
+</body>
+</html>

@@ -25,19 +25,22 @@ const db = mysql.createConnection({
   database: 'hha',
 });
 
+// Route Register
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
 
-    // Simpan ke DB (plain text)
     const sql = 'INSERT INTO users (username, password) VALUES (?, ?)';
     db.query(sql, [username, password], (err, result) => {
         if (err) {
             console.error(err);
-            return res.send('<script>alert("Username sudah dipakai!"); window.location.href="register.html";</script>');
+            // Kirim ke register.html dengan pesan error
+            return res.redirect('/register.html?error=username_taken');
         }
-        res.send('<script>alert("Register sukses! Silakan login."); window.location.href="login.html";</script>');
+        // Redirect ke login dengan pesan sukses
+        res.redirect('/login.html?success=registered');
     });
 });
+
 
 // Route Login
 app.post('/login', (req, res) => {
@@ -48,20 +51,20 @@ app.post('/login', (req, res) => {
         if (err) throw err;
 
         if (results.length > 0) {
-          res.send(`
-            <script>
-              localStorage.setItem('isLoggedIn', 'true');
-              localStorage.setItem('username', '${username}');
-              window.location.href = '/home.html';
-            </script>
-          `);
-      } else {
-            res.send('<script>localStorage.removeItem("isLoggedIn"); alert("Username atau Password salah!"); window.location.href="login.html";</script>');
+            // Login sukses
+            res.send(`
+                <script>
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('username', '${username}');
+                    window.location.href = '/home.html';
+                </script>
+            `);
+        } else {
+            // Redirect ke login dengan pesan error
+            res.redirect('/login.html?error=invalid_credentials');
         }
     });
 });
-
-
 
 
 

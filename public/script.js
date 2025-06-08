@@ -1,5 +1,20 @@
 // Transisi Loading ke Menu
 window.onload = function() {
+    // Logout otomatis saat browser di-refresh, atau saat pengguna tekan back/forward
+window.addEventListener("pageshow", (event) => {
+    const navType = performance.getEntriesByType("navigation")[0].type;
+    if (event.persisted || navType === "back_forward") {
+        logoutUser(); // Keluar jika user datang dari history navigation
+    }
+});
+
+// Opsional: Logout juga jika halaman muncul kembali dari cache (popstate/history)
+window.addEventListener("pageshow", (event) => {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        logoutUser(); // Panggil logout jika user kembali ke halaman ini
+    }
+});
+
     const loadingScreen = document.getElementById("loading-screen");
     const menuScreen = document.getElementById("menuScreen");
     const rpsDisplay = document.getElementById("rpsDisplay");
@@ -11,6 +26,19 @@ window.onload = function() {
     const yourScore = document.getElementById("yourScore");
     const savedScore = localStorage.getItem("gameScore");
     if (savedScore) yourScore.textContent = savedScore;
+
+    const savedMusicSetting = localStorage.getItem("musicEnabled");
+    const musicToggle = document.getElementById("musicToggle");
+
+    if (savedMusicSetting !== null) {
+        musicToggle.checked = savedMusicSetting === "true";
+
+        if (musicToggle.checked) {
+            playMusic();
+        } else {
+            stopMusic();
+        }
+    }
 
     // Mulai musik otomatis
     playMusic();
@@ -57,6 +85,10 @@ function stopMusic() {
 // Fungsi untuk mengatur musik (hidup/mati)
 function toggleMusic() {
     const musicToggle = document.getElementById("musicToggle");
+    
+    // Save preference to localStorage
+    localStorage.setItem("musicEnabled", musicToggle.checked);
+
     if (musicToggle.checked) {
         console.log("Musik dihidupkan melalui toggle...");
         playMusic();
@@ -66,10 +98,11 @@ function toggleMusic() {
     }
 }
 
+
 // Fungsi tombol menu
 function startGame() {
     if (!isHeroSelected) {
-        alert("Silakan pilih hero terlebih dahulu dengan menekan tombol Select!");
+        showDangerAlert("Pilih hero dulu!");
         return;
     }
     stopMusic();
@@ -78,8 +111,8 @@ function startGame() {
     window.location.href = "game.html";
 }
 
+
 function showHighscore() {
-    stopMusic();
     document.getElementById("menuScreen").style.display = "none";
     document.getElementById("characterSelection").style.display = "none";
     document.getElementById("highscoreScreen").style.display = "block";
@@ -87,9 +120,11 @@ function showHighscore() {
     // Ambil username dari localStorage (pastikan saat login disimpan)
     const username = localStorage.getItem("username");
     if (!username) {
-        alert("Kamu belum login!");
-        return;
-    }
+    showDangerAlert("Kamu belum login!");
+    setTimeout(() => window.location.reload(), 1500); // Optional delay before reload
+    return;
+}
+
 
     // Fetch skor tertinggi dari server
     fetch(`http://localhost:5000/api/highscore/${username}`)
@@ -106,7 +141,6 @@ function showHighscore() {
 
 
 function openOptions() {
-    stopMusic();
     document.getElementById("menuScreen").style.display = "none";
     document.getElementById("characterSelection").style.display = "none";
     document.getElementById("optionsScreen").style.display = "block";
@@ -156,22 +190,24 @@ function updateCharacterDisplay() {
 
 function selectHero() {
     const selectedHero = heroes[currentHeroIndex];
-    alert("You selected: " + selectedHero.name);
     localStorage.setItem("selectedHero", selectedHero.name);
     isHeroSelected = true;
+    showSuccessAlert("You selected:", selectedHero.name);
 }
+
+
 
 function selectChoice(choice) {
     const description = document.getElementById("rpsDescription");
     switch (choice) {
         case 'rock':
-            description.textContent = "Rock: Beats Scissors, loses to Paper. A solid choice for a strong defense!";
+            description.innerHTML = "Rock: Beats Scissors<br>Loses to Paper";
             break;
         case 'paper':
-            description.textContent = "Paper: Beats Rock, loses to Scissors. Perfect for a clever strategy!";
+            description.innerHTML = "Paper: Beats Rock<br>Loses to Scissors";
             break;
         case 'scissors':
-            description.textContent = "Scissors: Beats Paper, loses to Rock. Quick and decisive attack!";
+            description.innerHTML = "Scissors: Beats Paper<br>Loses to Rock";
             break;
     }
 }
@@ -199,12 +235,63 @@ function showInfo() {
 }
 
 // Fungsi untuk mengatur animasi (hidup/mati)
+// Called when checkbox is toggled
 function toggleAnimations() {
     const animToggle = document.getElementById("animToggle");
-    const elements = document.querySelectorAll(".hero-image, .rps-image");
-    if (animToggle.checked) {
-        elements.forEach(el => el.style.transition = "transform 0.3s ease");
-    } else {
-        elements.forEach(el => el.style.transition = "none");
-    }
+    localStorage.setItem("animationsEnabled", animToggle.checked);
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+    const animToggle = document.getElementById("animToggle");
+    const animationsEnabled = localStorage.getItem("animationsEnabled");
+
+    if (animationsEnabled === "false") {
+        animToggle.checked = false;
+    } else {
+        animToggle.checked = true;
+    }
+});
+
+
+
+function logoutUser() {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("username");
+    window.location.href = "login.html";
+}
+
+function showDangerAlert(message) {
+    const alertContainer = document.getElementById('alertContainer');
+
+    // Create the alert element
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-danger custom-alert';
+    alert.innerHTML = `
+        <button type="button" class="btn-close" aria-label="Close" onclick="this.parentElement.remove()"></button>
+        ${message}
+    `;
+
+    alertContainer.appendChild(alert);
+
+    // Automatically fade out after 3 seconds
+    setTimeout(() => {
+        alert.classList.add('fade-out');
+        setTimeout(() => alert.remove(), 300); // Remove after fade-out
+    }, 3000);
+}
+
+function showSuccessAlert(message, boldText = "") {
+    const alertContainer = document.getElementById('alertContainer');
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-success custom-alert';
+    alert.innerHTML = `
+        <button type="button" class="btn-close" aria-label="Close" onclick="this.parentElement.remove()"></button>
+        ${message} <strong>${boldText}</strong>
+    `;
+    alertContainer.appendChild(alert);
+    setTimeout(() => {
+        alert.classList.add('fade-out');
+        setTimeout(() => alert.remove(), 300);
+    }, 3000);
+}
+
